@@ -7,7 +7,7 @@ import { gql, useMutation } from '@apollo/client';
 
   const NUEVA_CUENTA = gql`
     mutation crearUsuario($input: UsuarioInput) {
-      crearUsuario(input : $input)
+      crearUsuario(input:$input)
     }
   `;
 
@@ -48,10 +48,10 @@ const CrearCuenta = () => {
           }
         }
       });
-      console.log(data)
+      guardarMensaje(data.crearUsuario);
+      navigation.navigate('Login');
     } catch (error) {
-      console.log(error);
-      // guardarMensaje(error.message.replace('GraphQL error: ', ''));
+      guardarMensaje(error.message.replace('GraphQL error', ''));
     }
 
   }
