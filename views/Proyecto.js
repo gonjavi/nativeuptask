@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
 import { Container, Button, Text, H2, Content, List, Form, Item, Input, Toast  } from 'native-base';
 import globalStyles from '../styles/global';
 import { gql, useMutation, useQuery } from '@apollo/client';
+import Tarea from '../components/Tarea';
 
 // crear nuevas tareas
 const NUEVA_TAREA = gql`
@@ -83,7 +85,7 @@ const Proyecto = ({ route }) => {
   // si apollo esta consultando
   if (loading) return <Text>Cargando ...</Text>
 
-  
+
   return (
    <Container style={[globalStyles.contenedor], { backgroundColor: '#e84347'}}>
      <Form style={{ marginHorizontal: '2.5%', marginTop: 20 }}>
@@ -103,10 +105,29 @@ const Proyecto = ({ route }) => {
        >
          <Text>Crear Tarea</Text>
        </Button>
-       {mensaje && mostrarAlerta()}
-     </Form>
+    </Form>
+    
+    <H2 style={globalStyles.subtitulo}> Tareas: {route.params.nombre}</H2>
+
+    <Content>
+      <List style={styles.contenido}>
+        {data.obtenerTareas.map(tarea => (
+          <Tarea
+            key={tarea.id}
+            tarea={tarea}
+          />
+        ))}
+      </List>
+    </Content>
+     {mensaje && mostrarAlerta()}
    </Container>
   );
 }
 
+const styles = StyleSheet.create({
+  contenido: {
+    backgroundColor: '#fff',
+    marginHorizontal: '2.5%',
+  }
+})
 export default Proyecto;
