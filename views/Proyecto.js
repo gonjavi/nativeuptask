@@ -115,6 +115,7 @@ const Proyecto = ({ route }) => {
           <Tarea
             key={tarea.id}
             tarea={tarea}
+            proyectoId={id}
           />
         ))}
       </List>

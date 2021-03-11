@@ -20,12 +20,47 @@ const ELIMINAR_TAREA = gql`
   }
 `;
 
-const Tarea = ({ tarea }) => {
+// consulta las tareas del proyecto
+const OBTENER_TAREAS = gql`
+  query obtenerTareas($input: ProyectoIDInput) {
+    obtenerTareas(input: $input) {
+      id
+      nombre
+      estado
+    }
+  }
+`;
+
+const Tarea = ({ tarea, proyectoId }) => {
 
   // Apollo
   const [ actualizarTarea ] = useMutation(ACTUALIZAR_TAREA);
-  const [ eliminarTarea ] = useMutation(ELIMINAR_TAREA);
-  const { id } = tarea;
+  const [ eliminarTarea ] = useMutation(ELIMINAR_TAREA, {
+    update(cache) {
+      const { obtenerTareas } = cache.readQuery({
+        query: OBTENER_TAREAS,
+        variables: {
+          input: {
+            proyecto: proyectoId
+          }
+        }
+      });
+
+      cache.writeQuery({
+        query: {
+          variables: {
+            input: {
+              proyecto: proyectoId
+            }
+          },
+          data: {
+            obtenerTareas: obtenerTareas.filter(tareaActual => tareaActual.id !== tarea.id )
+          }
+        }
+      })
+    }
+  });
+ 
 
   // cambiar estado de uns tarea a completa o incompleta
   const camabiarEstado = async () => {
