@@ -10,6 +10,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './views/Login';
 import CrearCuenta from './views/CrearCuenta';
+import Proyectos from './views/Proyectos';
+import NuevoProyecto from './views/NuevoProyecto';
 
 const Stack = createStackNavigator();
 
@@ -33,6 +35,36 @@ const App = () => {
               component={CrearCuenta}
               options={{
                 title: "Crear Cuenta",
+                headerStyle: {
+                  backgroundColor: '#28303b'
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                  fontWeight: 'bold',
+                }
+              }}
+            />
+
+            <Stack.Screen
+              name="Proyectos"
+              component={Proyectos}
+              options={{
+                title: "Proyectos",
+                headerStyle: {
+                  backgroundColor: '#28303b'
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                  fontWeight: 'bold',
+                }
+              }}
+            />
+
+            <Stack.Screen
+              name="NuevoProyecto"
+              component={NuevoProyecto}
+              options={{
+                title: "Nuevo Proyecto",
                 headerStyle: {
                   backgroundColor: '#28303b'
                 },

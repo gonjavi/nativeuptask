@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Container, Button, Text, H1, Input, Form, Item, Toast } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import globalStyles from '../styles/global';
+
 import { gql, useMutation } from '@apollo/client';
 
   const NUEVA_CUENTA = gql`
