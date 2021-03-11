@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Button, Text, H2, Content, List, Form, Item, Input, Toast  } from 'native-base';
 import globalStyles from '../styles/global';
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 
 // crear nuevas tareas
 const NUEVA_TAREA = gql`
@@ -15,11 +15,34 @@ const NUEVA_TAREA = gql`
   }
 `;
 
+// consulta las tareas del proyecto
+const OBTENER_TAREAS = gql`
+  query obtenerTareas($input: ProyectoIDInput) {
+    obtenerTareas(input: $input) {
+      id
+      nombre
+      estado
+    }
+  }
+`;
+
 const Proyecto = ({ route }) => {
+  // obtiene el id del proyecto
+  const { id } = route.params;
+
   const [nombre, guardarNombre] = useState('');
   const [mensaje, guardarMensaje] = useState(null);
   
-  // apollo 
+  // apollo obtener tareas
+  const { data, loading, error } = useQuery(OBTENER_TAREAS, {
+    variables: {
+      input: {
+        proyecto: id
+      }
+    }
+  })
+
+  // apollo crear tareas
   const [ nuevaTarea ] = useMutation(NUEVA_TAREA);
 
   const handleSubmit = async () => {
@@ -34,7 +57,7 @@ const Proyecto = ({ route }) => {
         variables: {
           input: {
             nombre,
-            proyecto: route.params.id
+            proyecto: id
           }
         }
       });
@@ -56,6 +79,11 @@ const Proyecto = ({ route }) => {
       duration: 5000
     });
   }
+
+  // si apollo esta consultando
+  if (loading) return <Text>Cargando ...</Text>
+
+  
   return (
    <Container style={[globalStyles.contenedor], { backgroundColor: '#e84347'}}>
      <Form style={{ marginHorizontal: '2.5%', marginTop: 20 }}>
